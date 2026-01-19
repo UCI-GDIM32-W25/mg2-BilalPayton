@@ -5,17 +5,18 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _rigidbody;
-    [SerializeField] private CapsuleCollider2D _collider;
+    [SerializeField] private GameController _gameController;
     [SerializeField] private float _jump;
 
-    bool _isGrounded = true;
+    private bool _isGrounded = true;
+    private int _points;
 
-    public void Start()
+    private void Start()
     {
-        
+        _points = 0;
     }
 
-    public void Update()
+    private void Update()
     {
 
         if (Input.GetKey(KeyCode.Space) && _isGrounded == true)
@@ -32,6 +33,17 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "ground")
         {
             _isGrounded = true;
+        }
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "coin")
+        {
+            Destroy(collision.gameObject);
+            _points++;
+            _gameController.UpdatePoints(_points);
         }
     }
 
